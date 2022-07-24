@@ -25,7 +25,9 @@ public class SecurityConfig {
         //------------------------------------------------
 
         // do czasu implementacji security
-        http.authorizeRequests().antMatchers("/**").permitAll();
+        http.authorizeRequests().anyRequest().permitAll();
+        http.csrf().disable();
+
 
         return http.build();
     }

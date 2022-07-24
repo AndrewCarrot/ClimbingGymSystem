@@ -100,7 +100,7 @@ class ClimberServiceImplTest {
         given(climberRepository.save(any())).willReturn(new Climber());
 
         //when
-        climberService.createNote(1L,note);
+        climberService.addNote(1L,note);
 
         //then
         verify(climberRepository, times(1)).save(climberArgumentCaptor.capture());

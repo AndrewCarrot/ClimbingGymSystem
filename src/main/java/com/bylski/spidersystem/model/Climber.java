@@ -45,7 +45,7 @@ public class Climber {
     private ClassPass classPass;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "climbingGroupId", nullable = false)
+    @JoinColumn(name = "climbingGroupId")
     private ClimbingGroup climbingGroup;
 
 }

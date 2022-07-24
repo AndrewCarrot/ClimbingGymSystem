@@ -7,8 +7,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface ClimberService {
     void createClimber(ClimberDTO climberDTO);
-    void createNote(Long climberId, String note);
+    void addNote(Long climberId, String note);
 
+    Page<Climber> getAllClimbers(Pageable pageable);
     Page<Climber> getClimbersByFirstName(String firstName, Pageable pageable);
     Page<Climber> getClimbersByLastName(String lastName, Pageable pageable);
     Climber getClimberByCardNumber(String cardNumber);

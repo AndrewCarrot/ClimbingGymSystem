@@ -38,7 +38,7 @@ public class ClimberServiceImpl implements ClimberService {
     }
 
     @Override
-    public void createNote(Long climberId, String note) {
+    public void addNote(Long climberId, String note) {
         climberRepository.findById(climberId).map(
                 climber->{
                     climber.setNote(note);
@@ -59,6 +59,10 @@ public class ClimberServiceImpl implements ClimberService {
                 }).orElseThrow(()-> new ResourceNotFoundException("climber","id",climberId));
     }
 
+    @Override
+    public Page<Climber> getAllClimbers(Pageable pageable){
+        return climberRepository.findAll(pageable);
+    }
     @Override
     public Page<Climber> getClimbersByFirstName(String firstName, Pageable pageable) {
         return climberRepository.getClimbersByFirstName(firstName, pageable);
