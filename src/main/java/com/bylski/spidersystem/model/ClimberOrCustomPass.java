@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClimberAndCustomPass {
+public class ClimberOrCustomPass {
     private Climber climber;
     private CustomPass customPass;
 }

@@ -14,7 +14,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
         // bez tego nie działa konsola h2 --------------
-
         http
                 .authorizeRequests().antMatchers("/h2-console/**").permitAll();
         // this will ignore only h2-console csrf

@@ -2,6 +2,7 @@ package com.bylski.spidersystem.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class ClimbingGroup {
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "climbingGroup")
+    @EqualsAndHashCode.Exclude
     private Set<Climber> climbers = new HashSet<>();
 
     public void addClimber(Climber climber){

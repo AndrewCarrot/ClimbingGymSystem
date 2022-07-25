@@ -2,6 +2,7 @@ package com.bylski.spidersystem.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
@@ -34,18 +35,22 @@ public class Climber {
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "punchPassId")
+    @EqualsAndHashCode.Exclude
     private PunchPass punchPass;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "timePassId")
+    @EqualsAndHashCode.Exclude
     private TimePass timePass;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "classPassId")
+    @EqualsAndHashCode.Exclude
     private ClassPass classPass;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "climbingGroupId")
+    @EqualsAndHashCode.Exclude
     private ClimbingGroup climbingGroup;
 
 }

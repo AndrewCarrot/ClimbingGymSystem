@@ -20,27 +20,27 @@ public class ClimberController {
         this.climberService = climberService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public void createClimber(@RequestBody @Valid ClimberDTO climberDTO){
         climberService.createClimber(climberDTO);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/get/all")
     public Page<Climber> getAllClimbers(Pageable pageable){
         return climberService.getAllClimbers(pageable);
     }
 
-    @GetMapping("/by-first-name")
+    @GetMapping("/get/by-first-name")
     public Page<Climber> getClimbersByFirstName(@RequestParam String firstName, Pageable pageable){
         return climberService.getClimbersByFirstName(firstName,pageable);
     }
 
-    @GetMapping("/by-last-name")
+    @GetMapping("/get/by-last-name")
     public Page<Climber> getClimbersByLastName(@RequestParam String lastName, Pageable pageable){
         return climberService.getClimbersByLastName(lastName, pageable);
     }
 
-    @GetMapping("/by-card-number")
+    @GetMapping("/get/by-card-number")
     public Climber getClimberByCardNumber(@RequestParam String cardNumber){
         return climberService.getClimberByCardNumber(cardNumber);
     }
@@ -50,17 +50,17 @@ public class ClimberController {
         climberService.updateClimber(climberId, climberDTO);
     }
 
-    @PatchMapping("/update/cardNumber")
+    @PatchMapping("/update-card")
     public void changeCardNumber(@RequestParam Long climberId, @RequestBody String cardNumber){
         climberService.changeCardNumber(climberId, cardNumber);
     }
 
-    @PatchMapping("/update/note")
+    @PatchMapping("/update-note")
     public void addNote(@RequestParam Long climberId, @RequestBody String note){
         climberService.addNote(climberId, note);
     }
 
-    @PatchMapping("/delete/note")
+    @PatchMapping("/delete-note")
     public void deleteNote(@RequestParam Long climberId){
         climberService.deleteNote(climberId);
     }

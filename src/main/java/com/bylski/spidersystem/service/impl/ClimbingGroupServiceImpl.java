@@ -28,14 +28,31 @@ public class ClimbingGroupServiceImpl implements ClimbingGroupService {
         this.modelMapper = modelMapper;
     }
 
+    private void groupDataClashCheck(ClimbingGroupDTO climbingGroupDTO) {
+        Optional<ClimbingGroup> group = climbingGroupRepository.findClimbingGroupByName(climbingGroupDTO.getName());
+        if(group.isPresent())
+            throw new RuntimeException("group with name: " + climbingGroupDTO.getName() + " already exists");
+
+        List<ClimbingGroup> groups = climbingGroupRepository.getClimbingGroupsByCoach(climbingGroupDTO.getCoach());
+        Optional<ClimbingGroup> anyGroup = groups.stream()
+                .filter(x->x.getDayOfWeek().equals(climbingGroupDTO.getDayOfWeek()))
+                .filter(x->x.getClassTime().equals(climbingGroupDTO.getClassTime()))
+                .findFirst();
+        if (anyGroup.isPresent())
+            throw new RuntimeException("coach can't have two groups at the same time");
+    }
+
+    @Override
+    public ClimbingGroup getGroupByName(String name){
+        return climbingGroupRepository.findClimbingGroupByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException("group","name",name));
+    }
     @Override
     public void createGroup(ClimbingGroupDTO climbingGroupDTO) {
-        Optional<ClimbingGroup> x = climbingGroupRepository.findClimbingGroupByName(climbingGroupDTO.getName());
+        groupDataClashCheck(climbingGroupDTO);
 
-        if (x.isPresent()){
-            throw new RuntimeException("name already taken");
-        }
         ClimbingGroup climbingGroup = modelMapper.map(climbingGroupDTO,ClimbingGroup.class);
+
         climbingGroupRepository.save(climbingGroup);
     }
 
@@ -61,21 +78,19 @@ public class ClimbingGroupServiceImpl implements ClimbingGroupService {
 
     @Override
     public void updateGroup(Long id, ClimbingGroupDTO climbingGroupDTO) {
-        Optional<ClimbingGroup> x = climbingGroupRepository.findClimbingGroupByName(climbingGroupDTO.getName());
-
-        if(x.isPresent())
-            throw new RuntimeException("name already taken");
+        groupDataClashCheck(climbingGroupDTO);
 
         climbingGroupRepository.findById(id).map(
-                group -> {
-                    group.setName(climbingGroupDTO.getName());
-                    group.setCoach(climbingGroupDTO.getCoach());
-                    group.setDayOfWeek(climbingGroupDTO.getDayOfWeek());
-                    group.setClassTime(climbingGroupDTO.getClassTime());
-                    return climbingGroupRepository.save(group);
+                g -> {
+                    g.setName(climbingGroupDTO.getName());
+                    g.setCoach(climbingGroupDTO.getCoach());
+                    g.setDayOfWeek(climbingGroupDTO.getDayOfWeek());
+                    g.setClassTime(climbingGroupDTO.getClassTime());
+                    return climbingGroupRepository.save(g);
                 }
         );
     }
+
 
     @Override
     public void addClimberToGroup(Long climberId, Long climbingGroupId){
