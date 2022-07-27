@@ -2,10 +2,7 @@ package com.bylski.spidersystem.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -35,7 +32,7 @@ public class ClassPass extends Pass {
         this.validFrom = validFrom;
         this.validTill = validFrom.plusDays(30);
         this.multisport = multisport;
-        punches = classFrequency==ClassFrequency.ONCE_PER_WEEK ? 4:8;
+        this.punches = classFrequency==ClassFrequency.ONCE_PER_WEEK ? 4:8;
     }
 
 }

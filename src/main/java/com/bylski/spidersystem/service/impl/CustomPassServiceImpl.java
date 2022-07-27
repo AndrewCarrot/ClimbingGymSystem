@@ -2,7 +2,6 @@ package com.bylski.spidersystem.service.impl;
 
 import com.bylski.spidersystem.exception.ResourceNotFoundException;
 import com.bylski.spidersystem.model.CustomPass;
-import com.bylski.spidersystem.model.PassType;
 import com.bylski.spidersystem.model.dto.CustomPassDTO;
 import com.bylski.spidersystem.repository.ClimberRepository;
 import com.bylski.spidersystem.repository.CustomPassRepository;
@@ -33,7 +32,6 @@ public class CustomPassServiceImpl implements CustomPassService {
         ) throw new RuntimeException("card number already taken");
 
         CustomPass customPass = modelMapper.map(customPassDTO,CustomPass.class);
-        customPass.setType(PassType.CUSTOM);
         customPassRepository.save(customPass);
     }
 
@@ -55,7 +53,8 @@ public class CustomPassServiceImpl implements CustomPassService {
 
     @Override
     public void updateCustomPass(Long passId, CustomPassDTO customPassDTO) {
-        if (customPassRepository.existsByCardNumber(customPassDTO.getCardNumber()))
+        if (customPassRepository.existsByCardNumber(customPassDTO.getCardNumber()) ||
+                climberRepository.existsByCardNumber(customPassDTO.getCardNumber()))
             throw new RuntimeException("card number already taken");
 
         customPassRepository.findById(passId).map(

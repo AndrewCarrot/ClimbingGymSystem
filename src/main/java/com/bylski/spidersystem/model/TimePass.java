@@ -19,18 +19,17 @@ public class TimePass extends Pass{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer duration;
+    private PassDuration duration;
 
     private LocalDate validFrom;
 
     private LocalDate validTill;
 
 
-    public TimePass(boolean discount, String note,Integer duration, LocalDate validFrom){
+    public TimePass(boolean discount, String note,PassDuration duration, LocalDate validFrom){
         super(discount,note);
         this.duration = duration;
         this.validFrom = validFrom;
-        this.validTill = validFrom.plusDays(duration);
-        this.setType(PassType.TIME);
+        this.validTill = duration == PassDuration.ONE_MONTH ? validFrom.plusDays(30):validFrom.plusDays(90);
     }
 }

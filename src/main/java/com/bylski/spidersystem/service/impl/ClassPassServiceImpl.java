@@ -42,79 +42,88 @@ public class ClassPassServiceImpl implements ClassPassService {
 
     @Override
     public void deleteClassPass(Long climberId) {
-        climberRepository.findById(climberId).map(
-                climber -> {
-                    classPassRepository.delete(climber.getClassPass());
-                    return climberRepository.save(climber);
-                }
-        ).orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+        Climber climber = climberRepository.findById(climberId)
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id", climberId));
+        ClassPass classPass = climber.getClassPass();
+
+        climber.setClassPass(null);
+        climberRepository.save(climber);
+        classPassRepository.delete(classPass);
     }
 
     @Override
     public ClassPass getPass(Long climberId) {
-        return climberRepository.findById(climberId).map(
-                Climber::getClassPass
-        ).orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+        return climberRepository.findById(climberId).map(Climber::getClassPass)
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id", climberId));
     }
 
     @Override
     public void renewPass(Long climberId) {
         Climber climber = climberRepository.findById(climberId)
-                .orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id", climberId));
         ClassPass classPass = climber.getClassPass();
-        classPass.setPunches(classPass.getClassFrequency()== ClassFrequency.ONCE_PER_WEEK?4:8);
-        classPass.setValidTill(LocalDate.now().plusDays(30));
-        climber.setClassPass(classPass);
-        climberRepository.save(climber);
+
+        if(classPass != null) {
+            classPass.setPunches(classPass.getClassFrequency() == ClassFrequency.ONCE_PER_WEEK ? 4 : 8);
+            classPass.setValidTill(LocalDate.now().plusDays(30));
+            classPassRepository.save(classPass);
+        }
     }
 
     @Override
     public void updatePass(Long climberId, ClassPassDTO classPassDTO) {
         Climber climber = climberRepository.findById(climberId)
-                .orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
-        ClassPass classPass = Stream.of(climber.getClassPass()).map(
-                x -> {
-                    x.setClassFrequency(classPassDTO.getClassFrequency());
-                    x.setMultisport(classPassDTO.isMultisport());
-                    x.setDiscount(classPassDTO.isDiscount());
-                    x.setValidTill(classPassDTO.getValidFrom().plusDays(30));
-                    x.setNote(classPassDTO.getNote());
-                    return x;
-                }
-        ).findFirst().get();
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id", climberId));
+        ClassPass classPass = climber.getClassPass();
 
-        climber.setClassPass(classPass);
-        climberRepository.save(climber);
+        if(classPass != null){
+            classPass.setDiscount(classPassDTO.isDiscount());
+            classPass.setNote(classPassDTO.getNote());
+            classPass.setMultisport(classPassDTO.isMultisport());
+            classPass.setClassFrequency(classPassDTO.getClassFrequency());
+            classPass.setValidFrom(classPassDTO.getValidFrom());
+            classPass.setValidTill(classPassDTO.getValidFrom().plusDays(30));
+
+            classPassRepository.save(classPass);
+        }
+
+
     }
 
     @Override
     public void addDays(Long climberId, Integer days) {
-        climberRepository.findById(climberId).map(
-                climber -> {
-                    climber.getClassPass().setValidTill(climber.getClassPass().getValidTill().plusDays(days));
-                    return climberRepository.save(climber);
-                }
-        );
+        Climber climber = climberRepository.findById(climberId)
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+        ClassPass classPass = climber.getClassPass();
+
+        if(classPass != null) {
+            classPass.setValidTill(classPass.getValidTill().plusDays(days));
+            classPassRepository.save(classPass);
+        }
+
     }
 
     @Override
     public void givePunches(Long climberId) {
-        climberRepository.findById(climberId).map(
-                climber -> {
-                    climber.getClassPass().setPunches(climber.getClassPass().getPunches()+1);
-                    return climberRepository.save(climber);
-                }
-        );
+        Climber climber = climberRepository.findById(climberId)
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+        ClassPass classPass = climber.getClassPass();
 
+        if(classPass != null){
+            classPass.setPunches(classPass.getPunches()+1);
+            classPassRepository.save(classPass);
+        }
     }
 
     @Override
     public void takePunches(Long climberId) {
-        climberRepository.findById(climberId).map(
-                climber -> {
-                    climber.getClassPass().setPunches(climber.getClassPass().getPunches()-1);
-                    return climberRepository.save(climber);
-                }
-        );
+        Climber climber = climberRepository.findById(climberId)
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+        ClassPass classPass = climber.getClassPass();
+
+        if(classPass != null){
+            classPass.setPunches(classPass.getPunches()-1);
+            classPassRepository.save(classPass);
+        }
     }
 }

@@ -2,7 +2,6 @@ package com.bylski.spidersystem.service.inf;
 
 import com.bylski.spidersystem.model.ClassPass;
 import com.bylski.spidersystem.model.dto.ClassPassDTO;
-import com.bylski.spidersystem.model.dto.TimePassDTO;
 
 public interface ClassPassService {
     void addClassPass(Long climberId, ClassPassDTO classPassDTO);

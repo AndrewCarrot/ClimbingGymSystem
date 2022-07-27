@@ -1,5 +1,6 @@
 package com.bylski.spidersystem.model.dto;
 
+import com.bylski.spidersystem.model.PassDuration;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -14,6 +15,6 @@ public class TimePassDTO{
     private boolean discount;
     @Lob
     private String note;
-    private Integer duration;
+    private PassDuration duration;
     private LocalDate validFrom;
 }

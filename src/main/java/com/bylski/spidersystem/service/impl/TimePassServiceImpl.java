@@ -2,6 +2,7 @@ package com.bylski.spidersystem.service.impl;
 
 import com.bylski.spidersystem.exception.ResourceNotFoundException;
 import com.bylski.spidersystem.model.Climber;
+import com.bylski.spidersystem.model.PassDuration;
 import com.bylski.spidersystem.model.TimePass;
 import com.bylski.spidersystem.model.dto.TimePassDTO;
 import com.bylski.spidersystem.repository.ClimberRepository;
@@ -34,7 +35,6 @@ public class TimePassServiceImpl implements TimePassService {
                 timePassDTO.getValidFrom()
         );
 
-        timePassRepository.save(timePass);
         climber.setTimePass(timePass);
         climberRepository.save(climber);
 
@@ -44,10 +44,11 @@ public class TimePassServiceImpl implements TimePassService {
     public void deleteTimePass(Long climberId) {
         Climber climber = climberRepository.findById(climberId)
                 .orElseThrow(()->new ResourceNotFoundException("climber","id",climberId));
+        TimePass timePass = climber.getTimePass();
 
-        timePassRepository.delete(climber.getTimePass()); // TODO will climber get null in the TimePass field?
+        climber.setTimePass(null);
         climberRepository.save(climber);
-
+        timePassRepository.delete(timePass);
     }
 
     @Override
@@ -58,42 +59,52 @@ public class TimePassServiceImpl implements TimePassService {
 
     @Override
     public void renewPass(Long climberId) {
-        climberRepository.findById(climberId).map(
-                    climber -> {
-                        climber.getTimePass().setValidFrom(LocalDate.now());
-                        climber.getTimePass().setValidTill(
-                                climber.getTimePass().getValidFrom().plusDays(climber.getTimePass().getDuration())
-                        );
-                        return climberRepository.save(climber); // timePass entity should be persisted alongside climber
-                    }
-                ).orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+        Climber climber = climberRepository.findById(climberId)
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+        TimePass timePass = climber.getTimePass();
+
+        if(timePass != null) {
+            timePass.setValidFrom(LocalDate.now());
+            timePass.setValidTill(
+                    timePass.getDuration() == PassDuration.ONE_MONTH ?
+                            timePass.getValidFrom().plusDays(30) :
+                            timePass.getValidFrom().plusDays(90)
+            );
+            timePassRepository.save(timePass);
+        }
+
     }
 
     @Override
     public void updatePass(Long climberId, TimePassDTO timePassDTO) {
-       climberRepository.findById(climberId).map(
-               climber -> {
-                   climber.getTimePass().setDiscount(timePassDTO.isDiscount());
-                   climber.getTimePass().setNote(timePassDTO.getNote());
-                   climber.getTimePass().setValidFrom(timePassDTO.getValidFrom());
-                   climber.getTimePass().setValidTill(
-                           timePassDTO.getValidFrom().plusDays(timePassDTO.getDuration())
-                   );
-                   return climberRepository.save(climber);
-               }
-       );
+        Climber climber = climberRepository.findById(climberId)
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+        TimePass timePass = climber.getTimePass();
 
+        if(timePass != null){
+            timePass.setDiscount(timePassDTO.isDiscount());
+            timePass.setNote(timePass.getNote());
+            timePass.setDuration(timePassDTO.getDuration());
+            timePass.setValidFrom(timePassDTO.getValidFrom());
+            timePass.setValidTill(
+                    timePassDTO.getDuration() == PassDuration.ONE_MONTH ?
+                            timePassDTO.getValidFrom().plusDays(30) :
+                            timePassDTO.getValidFrom().plusDays(90)
+            );
+            timePassRepository.save(timePass);
+        }
     }
 
     @Override
     public void addDays(Long climberId, Integer days) {
-        climberRepository.findById(climberId).map(
-                climber -> {
-                    climber.getTimePass().setValidTill(
-                            climber.getTimePass().getValidTill().plusDays(days)
-                    );
-                    return climberRepository.save(climber);
-                }
-        ).orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+        Climber climber = climberRepository.findById(climberId)
+                .orElseThrow(() -> new ResourceNotFoundException("climber", "id",climberId));
+        TimePass timePass = climber.getTimePass();
+
+        if(timePass != null){
+            timePass.setValidTill(timePass.getValidTill().plusDays(days));
+            timePassRepository.save(timePass);
+        }
     }
+
 }

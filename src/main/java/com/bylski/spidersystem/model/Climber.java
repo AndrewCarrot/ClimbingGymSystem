@@ -33,17 +33,17 @@ public class Climber {
     @Lob
     private String note;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "punchPassId")
     @EqualsAndHashCode.Exclude
     private PunchPass punchPass;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "timePassId")
     @EqualsAndHashCode.Exclude
     private TimePass timePass;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "classPassId")
     @EqualsAndHashCode.Exclude
     private ClassPass classPass;

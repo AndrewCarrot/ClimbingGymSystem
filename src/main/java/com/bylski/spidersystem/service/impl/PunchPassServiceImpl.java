@@ -2,7 +2,6 @@ package com.bylski.spidersystem.service.impl;
 
 import com.bylski.spidersystem.exception.ResourceNotFoundException;
 import com.bylski.spidersystem.model.Climber;
-import com.bylski.spidersystem.model.PassType;
 import com.bylski.spidersystem.model.PunchPass;
 import com.bylski.spidersystem.model.dto.PunchPassDTO;
 import com.bylski.spidersystem.repository.ClimberRepository;
@@ -32,9 +31,8 @@ public class PunchPassServiceImpl implements PunchPassService {
                     if (climber.getPunchPass() != null)
                         throw new RuntimeException("punch pass is already present");
                     PunchPass punchPass = modelMapper.map(punchPassDTO,PunchPass.class);
-                    punchPass.setType(PassType.PUNCH);
                     climber.setPunchPass(punchPass);
-                    return climberRepository.save(climber); // punchPass entity should be saved alongside climber due to cascade type PERSIST
+                    return climberRepository.save(climber);
                 }
         );
 
@@ -42,45 +40,43 @@ public class PunchPassServiceImpl implements PunchPassService {
 
     @Override
     public void deletePunchPass(Long climberId) {
-
         Climber climber = climberRepository.findById(climberId)
                 .orElseThrow(()->new ResourceNotFoundException("climber","id",climberId));
-        if (climber.getPunchPass() == null){
-            throw new RuntimeException("punch pass is not present");
-        }
+        PunchPass punchPass = climber.getPunchPass();
 
-        punchPassRepository.delete(climber.getPunchPass());
-        //climber.setPunchPass(null); // TODO necessary ?
+        climber.setPunchPass(null);
         climberRepository.save(climber);
-
+        punchPassRepository.delete(punchPass);
     }
 
     @Override
-    public PunchPass getPass(Long climberId) { // TODO legal ?
-
-        return climberRepository.findById(climberId).map(
-                Climber::getPunchPass
-        ).orElseThrow(()->new ResourceNotFoundException("climber","id",climberId));
+    public PunchPass getPass(Long climberId) {
+        return climberRepository.findById(climberId).map(Climber::getPunchPass)
+                .orElseThrow(()->new ResourceNotFoundException("climber","id",climberId));
 
     }
 
     @Override
     public void takePunch(Long climberId) {
-        climberRepository.findById(climberId).map(
-                climber -> {
-                    climber.getPunchPass().setPunches(climber.getPunchPass().getPunches()-1);
-                    return climberRepository.save(climber); // punchPuss should be persisted due to cascade type PERSIST
-                }
-        );
+        Climber climber = climberRepository.findById(climberId)
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id", climberId));
+        PunchPass punchPass = climber.getPunchPass();
+
+        if(punchPass != null) {
+            punchPass.setPunches(punchPass.getPunches() - 1);
+            punchPassRepository.save(punchPass);
+        }
     }
 
     @Override
     public void givePunch(Long climberId) {
-        climberRepository.findById(climberId).map(
-                climber -> {
-                    climber.getPunchPass().setPunches(climber.getPunchPass().getPunches()+1);
-                    return climberRepository.save(climber);
-                }
-        );
+        Climber climber = climberRepository.findById(climberId)
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id", climberId));
+        PunchPass punchPass = climber.getPunchPass();
+
+        if(punchPass != null) {
+            punchPass.setPunches(punchPass.getPunches() + 1);
+            punchPassRepository.save(punchPass);
+        }
     }
 }
