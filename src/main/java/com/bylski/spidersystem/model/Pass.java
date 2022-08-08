@@ -15,7 +15,7 @@ public abstract class Pass {
     private boolean discount;
 
     @Lob
-    private String note;
+    private String note; // TODO missing methods for adding note
 
     public Pass(boolean discount, String note){
         this.discount = discount;
