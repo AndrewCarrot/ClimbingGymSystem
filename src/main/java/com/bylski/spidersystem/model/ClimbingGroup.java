@@ -21,10 +21,20 @@ public class ClimbingGroup {
     private Long id;
     private String name;
     private String coach;
+    @Enumerated(EnumType.STRING)
     private ClimbingGroupType type;
+    @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
     private LocalTime classTime;
 
+    public ClimbingGroup(Long id, String name, String coach, ClimbingGroupType type, DayOfWeek dayOfWeek, LocalTime classTime) {
+        this.id = id;
+        this.name = name;
+        this.coach = coach;
+        this.type = type;
+        this.dayOfWeek = dayOfWeek;
+        this.classTime = classTime;
+    }
 
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
