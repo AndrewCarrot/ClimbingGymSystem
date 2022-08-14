@@ -21,6 +21,8 @@ public class DBInitialLoad {
     ){
         return (args) -> {
             TimePass timePass = new TimePass(true,null, PassDuration.ONE_MONTH, LocalDate.now());
+            ClassPass classPass = new ClassPass(true,"notatka",ClassFrequency.TWICE_PER_WEEK,LocalDate.now(),false);
+            PunchPass punchPass = new PunchPass(8,true,"kolejna");
             Climber climber1 = new Climber(1L,
                     "123456789",
                     "Marcin",
@@ -51,6 +53,8 @@ public class DBInitialLoad {
             );
 
             climber1.setTimePass(timePass);
+            climber1.setPunchPass(punchPass);
+            climber1.setClassPass(classPass);
             climberRepository.save(climber1);
             climberRepository.save(climber2);
             climbingGroupRepository.save(climbingGroup);

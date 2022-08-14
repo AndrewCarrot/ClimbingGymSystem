@@ -24,6 +24,7 @@ public class ClassPass extends Pass {
 
     private boolean multisport;
 
+    @Enumerated(EnumType.STRING)
     private ClassFrequency classFrequency;
 
     public ClassPass(boolean discount,String note, ClassFrequency classFrequency, LocalDate validFrom, boolean multisport){

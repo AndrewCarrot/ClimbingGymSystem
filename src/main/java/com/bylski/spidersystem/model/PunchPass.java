@@ -20,4 +20,9 @@ public class PunchPass extends Pass{
 
     private Integer punches;
 
+    public PunchPass(Integer punches, boolean discount, String note){
+        super(discount, note);
+        this.punches = punches;
+    }
+
 }
