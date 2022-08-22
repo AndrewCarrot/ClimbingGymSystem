@@ -43,7 +43,7 @@ public class DBInitialLoad {
                     null,
                     null,
                     null);
-            ClimbingGroup climbingGroup = new ClimbingGroup(
+            ClimbingGroup climbingGroup1 = new ClimbingGroup(
                     1L,
                     "Z1",
                     "Karol",
@@ -51,13 +51,31 @@ public class DBInitialLoad {
                     DayOfWeek.MONDAY,
                     LocalTime.of(19,0)
             );
+            ClimbingGroup climbingGroup2 = new ClimbingGroup(
+                    2L,
+                    "D1",
+                    "Mikołaj",
+                    ClimbingGroupType.CHILDREN,
+                    DayOfWeek.MONDAY,
+                    LocalTime.of(19,0)
+            );
+            ClimbingGroup climbingGroup3 = new ClimbingGroup(
+                    3L,
+                    "S1",
+                    "Mikołaj",
+                    ClimbingGroupType.INTERMEDIATE,
+                    DayOfWeek.MONDAY,
+                    LocalTime.of(17,0)
+            );
 
             climber1.setTimePass(timePass);
             climber1.setPunchPass(punchPass);
             climber1.setClassPass(classPass);
             climberRepository.save(climber1);
             climberRepository.save(climber2);
-            climbingGroupRepository.save(climbingGroup);
+            climbingGroupRepository.save(climbingGroup1);
+            climbingGroupRepository.save(climbingGroup2);
+            climbingGroupRepository.save(climbingGroup3);
         };
     }
 }
