@@ -23,6 +23,10 @@ public class ClimbingGroup {
     private String coach;
     @Enumerated(EnumType.STRING)
     private ClimbingGroupType type;
+    // new code
+    private LocalTime duration;
+
+    //
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
     private LocalTime classTime;
@@ -34,6 +38,7 @@ public class ClimbingGroup {
         this.type = type;
         this.dayOfWeek = dayOfWeek;
         this.classTime = classTime;
+        this.duration = type.getDuration();
     }
 
     @OneToMany(cascade = CascadeType.ALL,
