@@ -67,6 +67,14 @@ public class DBInitialLoad {
                     DayOfWeek.MONDAY,
                     LocalTime.of(17,0)
             );
+            ClimbingGroup climbingGroup4 = new ClimbingGroup(
+                    4L,
+                    "P1",
+                    "Mikołaj",
+                    ClimbingGroupType.BEGINNERS,
+                    DayOfWeek.TUESDAY,
+                    LocalTime.of(16,30)
+            );
 
             climber1.setTimePass(timePass);
             climber1.setPunchPass(punchPass);
@@ -76,6 +84,7 @@ public class DBInitialLoad {
             climbingGroupRepository.save(climbingGroup1);
             climbingGroupRepository.save(climbingGroup2);
             climbingGroupRepository.save(climbingGroup3);
+            climbingGroupRepository.save(climbingGroup4);
         };
     }
 }
