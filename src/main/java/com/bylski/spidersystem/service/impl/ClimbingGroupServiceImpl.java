@@ -53,6 +53,9 @@ public class ClimbingGroupServiceImpl implements ClimbingGroupService {
 
         ClimbingGroup climbingGroup = modelMapper.map(climbingGroupDTO,ClimbingGroup.class);
 
+        // 25.08
+        climbingGroup.setDuration(climbingGroup.getType().getDuration());
+
         climbingGroupRepository.save(climbingGroup);
     }
 
