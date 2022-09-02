@@ -41,20 +41,27 @@ public class ClimbingGroup {
         this.duration = type.getDuration();
     }
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "climbingGroup")
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(
+            name = "group_climbers",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "climber_id")
+    )
     @EqualsAndHashCode.Exclude
     private Set<Climber> climbers = new HashSet<>();
 
     public void addClimber(Climber climber){
         climbers.add(climber);
-        climber.setClimbingGroup(this);
+        climber.getClimbingGroups().add(this);
     }
 
     public void removeClimber(Climber climber){
         climbers.remove(climber);
-        climber.setClimbingGroup(null);
+        climber.getClimbingGroups().remove(this);
     }
 
 }

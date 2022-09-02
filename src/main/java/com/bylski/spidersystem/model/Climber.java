@@ -9,6 +9,8 @@ import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -50,9 +52,8 @@ public class Climber {
     private ClassPass classPass;
 
     @JsonIgnore // TODO temporary, serialization issue, use DTOs
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "climbingGroupId")
+    @ManyToMany(mappedBy = "climbers")
     @EqualsAndHashCode.Exclude
-    private ClimbingGroup climbingGroup;
+    private Set<ClimbingGroup> climbingGroups = new HashSet<>();
 
 }
