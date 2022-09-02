@@ -1,5 +1,6 @@
 package com.bylski.spidersystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,6 +49,7 @@ public class Climber {
     @EqualsAndHashCode.Exclude
     private ClassPass classPass;
 
+    @JsonIgnore // TODO temporary, serialization issue, use DTOs
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "climbingGroupId")
     @EqualsAndHashCode.Exclude
