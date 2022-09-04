@@ -10,8 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface ClimberRepository extends JpaRepository<Climber,Long> {
-    Page<Climber> getClimbersByFirstName(String firstName, Pageable pageable);
-    Page<Climber> getClimbersByLastName(String lastName, Pageable pageable);
+    Page<Climber> getClimbersByFirstNameIgnoreCase(String firstName, Pageable pageable);
+    Page<Climber> getClimbersByLastNameIgnoreCase(String lastName, Pageable pageable);
     Optional<Climber> findClimberByCardNumber(String cardNumber);
 
     boolean existsByCardNumber(String cardNumber);

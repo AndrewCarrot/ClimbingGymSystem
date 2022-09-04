@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @RequestMapping("/climbers")
 public class ClimberController {
 
-// TODO metody zwracające obiekt Climber powinny zwracać climberDTO
+// TODO metody zwracające obiekt Climber powinny zwracać climberDTO, to co nazwałem dto to payload
     private final ClimberService climberService;
 
     public ClimberController(ClimberService climberService) {

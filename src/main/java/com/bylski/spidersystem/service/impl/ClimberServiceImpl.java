@@ -65,12 +65,12 @@ public class ClimberServiceImpl implements ClimberService {
     }
     @Override
     public Page<Climber> getClimbersByFirstName(String firstName, Pageable pageable) {
-        return climberRepository.getClimbersByFirstName(firstName, pageable);
+        return climberRepository.getClimbersByFirstNameIgnoreCase(firstName, pageable);
     }
 
     @Override
     public Page<Climber> getClimbersByLastName(String lastName, Pageable pageable) {
-        return climberRepository.getClimbersByLastName(lastName, pageable);
+        return climberRepository.getClimbersByLastNameIgnoreCase(lastName, pageable);
     }
 
     @Override
@@ -82,17 +82,20 @@ public class ClimberServiceImpl implements ClimberService {
     @Override
     public void updateClimber(Long climberId, ClimberDTO climberData) {
         Optional<Climber> x = climberRepository.findClimberByCardNumber(climberData.getCardNumber());
-        if (x.isPresent())
+        Climber climber = climberRepository.findById(climberId)
+                .orElseThrow(() -> new ResourceNotFoundException("climber","id",climberId));
+
+        if (x.isPresent() && !x.get().getCardNumber().equals(climber.getCardNumber()))
             throw new RuntimeException("card number already taken");
 
-        climberRepository.findById(climberId).map(
-                climber -> {
-                    climber.setCardNumber(climberData.getCardNumber());
-                    climber.setFirstName(climberData.getFirstName());
-                    climber.setLastName(climberData.getLastName());
-                    climber.setPhoneNumber(climberData.getPhoneNumber());
-                    return climberRepository.save(climber);
-                }).orElseThrow(()-> new ResourceNotFoundException("climber","id",climberId));
+
+        climber.setCardNumber(climberData.getCardNumber());
+        climber.setFirstName(climberData.getFirstName());
+        climber.setLastName(climberData.getLastName());
+        climber.setPhoneNumber(climberData.getPhoneNumber());
+
+        climberRepository.save(climber);
+
     }
 
 
