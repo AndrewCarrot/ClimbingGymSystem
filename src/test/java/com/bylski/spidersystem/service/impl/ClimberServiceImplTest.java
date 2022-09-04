@@ -134,14 +134,14 @@ class ClimberServiceImplTest {
     public void getClimbersByFirstName_shouldInvokeRightMethodFromRepository(){
         climberService.getClimbersByFirstName("Martinez", Pageable.unpaged());
 
-        verify(climberRepository, times(1)).getClimbersByFirstNameIgnoreCase(eq("Martinez"),any());
+        verify(climberRepository, times(1)).getClimbersByFirstNameContainingIgnoreCase(eq("Martinez"),any());
     }
 
     @Test
     public void getClimbersByLastName_shouldInvokeRightMethodFromRepository(){
         climberService.getClimbersByLastName("Fernando", Pageable.unpaged());
 
-        verify(climberRepository, times(1)).getClimbersByLastNameIgnoreCase(eq("Fernando"), any());
+        verify(climberRepository, times(1)).getClimbersByLastNameContainingIgnoreCase(eq("Fernando"), any());
     }
 
 

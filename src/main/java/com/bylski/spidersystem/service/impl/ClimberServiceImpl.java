@@ -65,12 +65,12 @@ public class ClimberServiceImpl implements ClimberService {
     }
     @Override
     public Page<Climber> getClimbersByFirstName(String firstName, Pageable pageable) {
-        return climberRepository.getClimbersByFirstNameIgnoreCase(firstName, pageable);
+        return climberRepository.getClimbersByFirstNameContainingIgnoreCase(firstName, pageable);
     }
 
     @Override
     public Page<Climber> getClimbersByLastName(String lastName, Pageable pageable) {
-        return climberRepository.getClimbersByLastNameIgnoreCase(lastName, pageable);
+        return climberRepository.getClimbersByLastNameContainingIgnoreCase(lastName, pageable);
     }
 
     @Override
