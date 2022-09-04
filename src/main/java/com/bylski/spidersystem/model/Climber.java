@@ -21,7 +21,8 @@ public class Climber {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NaturalId
+    @NaturalId(mutable = true)
+    @Column(unique = true)
     private String cardNumber;
 
     @NotNull
