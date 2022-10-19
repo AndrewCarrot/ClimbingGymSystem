@@ -3,6 +3,7 @@ package com.bylski.spidersystem.config;
 import com.bylski.spidersystem.model.*;
 import com.bylski.spidersystem.repository.ClimberRepository;
 import com.bylski.spidersystem.repository.ClimbingGroupRepository;
+import com.bylski.spidersystem.repository.CustomPassRepository;
 import com.bylski.spidersystem.service.inf.TimePassService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,8 @@ public class DBInitialLoad {
     @Bean
     public CommandLineRunner loadData(
             ClimberRepository climberRepository,
-            ClimbingGroupRepository climbingGroupRepository
+            ClimbingGroupRepository climbingGroupRepository,
+            CustomPassRepository customPassRepository
     ){
         return (args) -> {
             TimePass timePass = new TimePass(true,null, PassDuration.ONE_MONTH, LocalDate.now());
@@ -75,6 +77,18 @@ public class DBInitialLoad {
                     DayOfWeek.TUESDAY,
                     LocalTime.of(16,30)
             );
+
+
+            CustomPass customPass1 = new CustomPass(
+                    1L,
+                    "8679584738",
+                    8,
+                    "Ryszard",
+                    "Świdnik"
+            );
+            customPass1.setDiscount(false);
+            customPass1.setNote("karnet prezentowy");
+            customPassRepository.save(customPass1);
 
             climber1.setTimePass(timePass);
             climber1.setPunchPass(punchPass);
